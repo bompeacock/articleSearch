@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardElevation="6dp"
+    tools:layout_width="200dp">
+
+    <TextView
+        android:id="@+id/txtSnippet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="7"
+        android:padding="4dp"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        tools:text="Far from candidates’ spotlights, hundreds of aides and volunteers are waging an unglamorous ground war unfolding with hidden intensity"
+        />
+</android.support.v7.widget.CardView>
