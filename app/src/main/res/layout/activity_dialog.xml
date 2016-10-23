@@ -49,12 +49,12 @@
             android:text="Sort order"
             android:textSize="18dp"/>
         <Spinner
-            android:id="@+id/spSort"
+            android:id="@+id/spinnerS"
             android:layout_marginLeft="80dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"/>
 
-        </Spinner>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.cong.articlesearch.R;
 import com.example.cong.articlesearch.model.Article;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public class ArticleRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void fillImage(Article article,ImageViewHolder holder) {
         holder.txtSnippet.setText(article.getSnippet());
-        Glide.with(holder.itemView.getContext())
+        Picasso.with(holder.itemView.getContext())
                 .load(article.getMutimedia().get(0).getUrl())
                 .into(holder.ivImage);
 

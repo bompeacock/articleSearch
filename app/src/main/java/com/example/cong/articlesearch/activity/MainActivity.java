@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.cong.articlesearch.R;
 import com.example.cong.articlesearch.adapter.ArticleRecycler;
@@ -99,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1&&resultCode==2){
-            mSearchRequest = (SearchRequest) data.getSerializableExtra("searchBack");
+            mSearchRequest = data.getParcelableExtra("searchBack");
+            search();
         }
     }
 
@@ -138,7 +140,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResult(SearchResult searchResult) {
                 mSearchRequest.addPage();
-                articleRecycler.addArticles(searchResult.getArticles());
+                if(searchResult!=null){
+                    articleRecycler.addArticles(searchResult.getArticles());
+                }
 
             }
         });
@@ -150,8 +154,11 @@ public class MainActivity extends AppCompatActivity {
         mArticleApi.search(mSearchRequest.castToMap()).enqueue(new Callback<SearchResult>() {
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                listener.onResult(response.body());
-                handleComplete();
+                if(response!=null){
+                    listener.onResult(response.body());
+                    handleComplete();
+                }
+
             }
 
             @Override

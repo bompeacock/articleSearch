@@ -28,8 +28,7 @@ import butterknife.ButterKnife;
 public class DialogActivity extends AppCompatActivity {
     @BindView(R.id.txtDate)
     TextView txtDate;
-    @BindView(R.id.spSort)
-    Spinner spSort;
+    Spinner spinner;
     @BindView(R.id.cbArts)
     CheckBox cbArts;
     @BindView(R.id.cbFashionAndStyle)
@@ -42,7 +41,7 @@ public class DialogActivity extends AppCompatActivity {
     Button btnSave;
     Intent intent;
     SearchRequest searchRequest;
-    List<String> listdesk = new ArrayList<>();
+    ArrayList<String> listdesk;
     ArrayAdapter<String> adapter;
     Calendar calendar = Calendar.getInstance();
     public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -53,10 +52,10 @@ public class DialogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dialog);
         ButterKnife.bind(this);
 
-//        intent = getIntent();
-//        searchRequest = (SearchRequest) intent.getSerializableExtra("search");
-//        setUpViews(searchRequest);
-//        setEvents();
+        intent = getIntent();
+        searchRequest = intent.getParcelableExtra("search");
+        setUpViews(searchRequest);
+        setEvents();
 
     }
 
@@ -77,10 +76,18 @@ public class DialogActivity extends AppCompatActivity {
 
     private void save() {
         searchRequest.setBeginDate(txtDate.getText().toString());
-        searchRequest.setSort(spSort.getSelectedItem().toString());
-        if(cbSports.isChecked()) searchRequest.setDeskSports(true);
-        if(cbFashionAndStyle.isChecked()) searchRequest.setDeskFashionAndStyle(true);
-        if(cbArts.isChecked())searchRequest.setDeskArts(true);
+        searchRequest.setSort(spinner.getSelectedItem().toString());
+        if(cbSports.isChecked()){
+            searchRequest.setDeskSports(true);
+        }else  searchRequest.setDeskSports(false);
+
+        if(cbFashionAndStyle.isChecked()){
+            searchRequest.setDeskFashionAndStyle(true);
+        }else searchRequest.setDeskFashionAndStyle(false);
+
+        if(cbArts.isChecked()){
+            searchRequest.setDeskArts(true);
+        }else  searchRequest.setDeskArts(false);
 
         intent.putExtra("searchBack",searchRequest);
         setResult(2,intent);
@@ -108,20 +115,25 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     private void setUpViews(SearchRequest searchRequest) {
+        spinner = (Spinner) findViewById(R.id.spinnerS);
+        listdesk = new ArrayList<>();
         listdesk.add("newest");listdesk.add("oldest");
-        adapter = new ArrayAdapter<String>(DialogActivity.this,android.R.layout.activity_list_item,listdesk);
+        adapter = new ArrayAdapter<String>(DialogActivity.this,android.R.layout.simple_list_item_1,listdesk);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spSort.setAdapter(adapter);
+        spinner.setAdapter(adapter);
+
         if(searchRequest!=null){
-            txtDate.setText(searchRequest.getBeginDate());
-            switch (searchRequest.getNewsDesk()){
+            switch (searchRequest.getSort()){
                 case "oldest":
-                    spSort.setSelection(1);
+                    spinner.setSelection(1);
                     break;
                 default:
-                    spSort.setSelection(0);
+                    spinner.setSelection(0);
                     break;
             }
+
+            txtDate.setText(searchRequest.getBeginDate());
+
             if(searchRequest.isDeskArts()) cbArts.setChecked(true);
             if(searchRequest.isDeskFashionAndStyle())cbFashionAndStyle.setChecked(true);
             if(searchRequest.isDeskSports()) cbSports.setChecked(true);

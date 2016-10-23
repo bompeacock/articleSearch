@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by Cong on 23/10/2016.
  */
 
-public class SearchRequest implements Serializable{
+public class SearchRequest implements Parcelable{
     private int page =0;
     private String q;
     private String beginDate;
@@ -32,6 +32,18 @@ public class SearchRequest implements Serializable{
         deskFashionAndStyle = in.readByte() != 0;
         deskSports = in.readByte() != 0;
     }
+
+    public static final Creator<SearchRequest> CREATOR = new Creator<SearchRequest>() {
+        @Override
+        public SearchRequest createFromParcel(Parcel in) {
+            return new SearchRequest(in);
+        }
+
+        @Override
+        public SearchRequest[] newArray(int size) {
+            return new SearchRequest[size];
+        }
+    };
 
     public int getPage() {
         return page;
@@ -94,7 +106,7 @@ public class SearchRequest implements Serializable{
         if(q!=null) map.put("q",q);
         if(beginDate!=null) map.put("begin_date",beginDate);
         if(sort!=null) map.put("sort",sort.toLowerCase());
-        if(getNewsDesk()!=null) map.put("fq", "news_desk:("+getNewsDesk()+")");
+        if(getNewsDesk()!=null) map.put("fq","news_desk:("+getNewsDesk()+")");
         map.put("page",page+"");
 
         return map;
@@ -102,12 +114,27 @@ public class SearchRequest implements Serializable{
     public String getNewsDesk(){
         if(!deskArts&&!deskFashionAndStyle&&!deskSports) return null;
         String value="";
-        if(deskArts) value+="\"Arts\" ";
-        if(deskFashionAndStyle) value+="\"Fashion & Style\"";
-        if(deskSports) value+="\"Sports\" ";
-        return  value.trim();
+        if(deskArts) value+="\"Arts\""+"%20";
+        if(deskFashionAndStyle) value+="\"Fashion & Style\""+"%20";
+        if(deskSports) value+="\"Sports\""+"%20";
+        return  value;
 
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(page);
+        parcel.writeString(q);
+        parcel.writeString(beginDate);
+        parcel.writeString(sort);
+        parcel.writeByte((byte) (deskArts ? 1 : 0));
+        parcel.writeByte((byte) (deskFashionAndStyle ? 1 : 0));
+        parcel.writeByte((byte) (deskSports ? 1 : 0));
+    }
 }
